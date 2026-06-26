@@ -1,0 +1,6 @@
+{
+  "outputDirectory": "frontend",
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "REPLACE_WITH_RAILWAY_URL/api/$1" }
+  ]
+}
