@@ -25,8 +25,9 @@ router.post('/register', async (req, res) => {
   if (password.length < 6)
     return res.status(400).json({ error: 'Password must be at least 6 characters' });
   try {
-    const { data: existing } = await supabase
+    const { data: existing, error: selectErr } = await supabase
       .from('ww_users').select('id').eq('email', email).maybeSingle();
+    if (selectErr) throw new Error('DB read failed: ' + selectErr.message);
     if (existing)
       return res.status(409).json({ error: 'Email already registered' });
     const hashed = await bcrypt.hash(password, 10);
