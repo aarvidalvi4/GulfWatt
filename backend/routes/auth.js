@@ -30,7 +30,8 @@ router.post('/register', async (req, res) => {
     if (existing)
       return res.status(409).json({ error: 'Email already registered' });
     const hashed = await bcrypt.hash(password, 10);
-    await supabase.from('ww_users').insert([{ name, email, password: hashed }]);
+    const { error: insertErr } = await supabase.from('ww_users').insert([{ name, email, password: hashed }]);
+    if (insertErr) throw new Error(insertErr.message);
     res.status(201).json({ message: 'Account created' });
   } catch (err) {
     console.error(err);
